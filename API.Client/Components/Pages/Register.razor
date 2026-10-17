@@ -1,0 +1,101 @@
+﻿@page "/register"
+
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light py-5" dir="rtl">
+    <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 style-card">
+        <!-- Header / Logo -->
+        <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center gap-2 mb-2">
+                <span class="bg-primary text-white p-2 rounded-3 fw-bold fs-4">ShiftMaster</span>
+            </div>
+            <p class="text-muted small">מערכת לניהול משמרות חכם</p>
+            <h2 class="fw-bold text-dark mt-3">יצירת חשבון חדש</h2>
+            <p class="text-secondary small">הצטרפו לאלפי עסקים שמנהלים משמרות בצורה חכמה, מדויקת ומהירה.</p>
+        </div>
+
+        <!-- Registration Form -->
+        <form>
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-secondary small">שם מלא</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white text-muted border-end-0">👤</span>
+                    <input type="text" class="form-control border-start-0" placeholder="ישראל ישראלי" />
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">שם משתמש</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-muted border-end-0">@@</span>
+                        <input type="text" class="form-control border-start-0" placeholder="israel_i" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">כתובת אימייל</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-muted border-end-0">✉️</span>
+                        <input type="email" class="form-control border-start-0" placeholder="name@company.co.il" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">סיסמה</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-muted border-end-0">🔒</span>
+                        <input type="password" class="form-control border-start-0" placeholder="לפחות 8 תווים" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary small">אימות סיסמה</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-muted border-end-0">🛡️</span>
+                        <input type="password" class="form-control border-start-0" placeholder="הזן שוב לאימות" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold text-secondary small">תפקיד במערכת</label>
+                <select class="form-select">
+                    <option selected>עובד (Employee) - הגשת זמינות וצפייה במשמרות</option>
+                    <option>מנהל (Manager) - ניהול משמרות, עובדים ואישורים</option>
+                </select>
+                <div class="form-text small mt-2 bg-info-subtle text-info-emphasis p-2 rounded-3">
+                    ℹ️ מנהלים מקבלים גישה מלאה להקמת סניפים, לוחות תורנות, אישור החלפות והפקת דוחות שכר.
+                </div>
+            </div>
+
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="termsCheck" />
+                <label class="form-check-label small text-secondary" for="termsCheck">
+                    קראתי ואני מסכים לתנאי השימוש וכן למדיניות הפרטיות של ShiftMaster.
+                </label>
+            </div>
+
+            <button type="button" class="btn btn-primary w-100 py-2 rounded-3 fw-bold mb-3">
+                הרשם עכשיו ←
+            </button>
+        </form>
+
+        <!-- Footer Link -->
+        <div class="text-center mt-3 pt-3 border-top">
+            <span class="text-secondary small">כבר יש לך חשבון? </span>
+            <a href="/login" class="text-primary text-decoration-none fw-bold small">התחבר כאן ></a>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 text-muted small mt-4">
+            <span>🔒 אבטחת מידע SSL מוצפנת</span>
+            <span>☁️ גיבוי אוטומטי בענן</span>
+            <span>🎧 תמיכה מלאה בעברית</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .style-card {
+        max-width: 650px;
+        width: 100%;
+    }
+</style>

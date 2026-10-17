@@ -1,0 +1,66 @@
+﻿@page "/login"
+
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light py-5" dir="rtl">
+    <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 style-card">
+        <!-- Header / Logo -->
+        <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center gap-2 mb-2">
+                <span class="bg-primary text-white p-2 rounded-3 fw-bold fs-4">ShiftMaster</span>
+            </div>
+            <p class="text-muted small">מערכת לניהול משמרות חכם</p>
+            <h2 class="fw-bold text-dark mt-3">התחברות למערכת</h2>
+            <p class="text-secondary small">הזן את פרטי ההתחברות שלך כדי להיכנס למערכת הניהול.</p>
+        </div>
+
+        <!-- Login Form -->
+        <form>
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-secondary small">שם משתמש או דוא"ל</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white text-muted border-end-0">👤</span>
+                    <input type="text" class="form-control border-start-0" placeholder="הזן שם משתמש או אימייל" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label fw-semibold text-secondary small mb-0">סיסמה</label>
+                    <a href="#" class="text-primary text-decoration-none small">שכחת סיסמה?</a>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text bg-white text-muted border-end-0">🔒</span>
+                    <input type="password" class="form-control border-start-0" placeholder="••••••••" />
+                </div>
+            </div>
+
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="rememberMe" />
+                <label class="form-check-label small text-secondary" for="rememberMe">
+                    זכור אותי במכשיר זה
+                </label>
+            </div>
+
+            <button type="button" class="btn btn-primary w-100 py-2 rounded-3 fw-bold mb-3">
+                התחבר עכשיו ←
+            </button>
+        </form>
+
+        <!-- Footer Link -->
+        <div class="text-center mt-3 pt-3 border-top">
+            <span class="text-secondary small">עדיין אין לך חשבון? </span>
+            <a href="/register" class="text-primary text-decoration-none fw-bold small">הרשם כאן ></a>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 text-muted small mt-4">
+            <span>🔒 אבטחת מידע SSL מוצפנת</span>
+            <span>☁️ גיבוי אוטומטי בענן</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .style-card {
+        max-width: 480px;
+        width: 100%;
+    }
+</style>

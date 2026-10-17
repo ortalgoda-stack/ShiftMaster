@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="API.Client/API.Client.csproj" Id="c4fdbc25-bef9-437d-80b4-f65d115b1a51" />
+  <Project Path="API/API.Server/API.Server.csproj" />
+  <Project Path="DAL/DAL.csproj" Id="38ee993c-809e-48fb-81cc-6b788a8e1dd9" />
+  <Project Path="Model/Model.csproj" Id="352469fd-7f8a-4eb9-86b6-743cf9be0cad" />
+</Solution>

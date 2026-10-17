@@ -1,0 +1,120 @@
+﻿@page "/"
+
+<div class="min-vh-100 bg-light p-4" dir="rtl">
+    <!-- Header / Navbar -->
+    <header class="d-flex justify-content-between align-items-center bg-white p-3 rounded-4 shadow-sm mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-primary text-white p-2 rounded-3 fw-bold fs-4">ShiftMaster</div>
+            <span class="text-muted small">ניהול משמרות חכם</span>
+        </div>
+        <nav class="d-none d-md-flex gap-4 fw-semibold text-secondary">
+            <a href="/" class="text-primary text-decoration-none">דף הבית</a>
+            <a href="#" class="text-decoration-none text-secondary">תוכניות</a>
+            <a href="#" class="text-decoration-none text-secondary">אודות</a>
+            <a href="#" class="text-decoration-none text-secondary">יצירת קשר</a>
+        </nav>
+        <div class="d-flex gap-2">
+            <a href="/login" class="btn btn-outline-secondary px-4 rounded-pill">התחברות</a>
+            <a href="/register" class="btn btn-primary px-4 rounded-pill">הרשמה למערכת</a>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="row g-4 align-items-center">
+        <!-- Hero Section Right -->
+        <div class="col-lg-6 text-end">
+            <span class="badge bg-primary-subtle text-primary mb-3 px-3 py-2 rounded-pill">
+                ✨ מערכת חכמה לתכנון ושבוץ משמרות
+            </span>
+            <h1 class="display-4 fw-bold text-dark mb-3">ShiftMaster</h1>
+            <h2 class="h2 fw-bold text-primary mb-3">ניהול משמרות חכם</h2>
+            <p class="lead text-secondary mb-4">
+                פלטפורמה אינטואיטיבית ומתקדמת לניהול עובדים, הגשת זמינות שבועית, ויצירת לוח משמרות אופטימלי בלחיצת כפתור אחת. מותאם למנהלים ולצוותים בכל סדר גודל.
+            </p>
+            <div class="d-flex gap-3 justify-content-start mb-4">
+                <a href="/register" class="btn btn-primary btn-lg rounded-pill px-4">הרשמה חינם עכשיו ←</a>
+                <a href="/login" class="btn btn-outline-primary btn-lg rounded-pill px-4">התחברות למערכת</a>
+            </div>
+            <div class="d-flex gap-4 text-muted small">
+                <span>✓ 14 ימי ניסיון ללא התחייבות</span>
+                <span>⚡ התחלה מיידית תוך 3 דקות</span>
+                <span>🛡️ תמיכה מלאה בעברית</span>
+            </div>
+        </div>
+
+        <!-- Left Preview Card -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-success-subtle text-success">● לוח פעיל</span>
+                    <div>
+                        <h5 class="fw-bold mb-0">לוח משמרות שבועי</h5>
+                        <small class="text-muted">סניף מרכז תל אביב · שבוע 28</small>
+                    </div>
+                </div>
+
+                <!-- Shift Items -->
+                <div class="bg-light p-3 rounded-3 mb-2 d-flex justify-content-between align-items-center">
+                    <span class="badge bg-success">מאושר</span>
+                    <div class="text-end">
+                        <div class="fw-bold">משמרת בוקר (07:00 - 15:30)</div>
+                        <small class="text-muted">3 עובדים משובצים · צוות שירות</small>
+                    </div>
+                </div>
+
+                <div class="bg-light p-3 rounded-3 mb-2 d-flex justify-content-between align-items-center">
+                    <span class="badge bg-success">מאושר</span>
+                    <div class="text-end">
+                        <div class="fw-bold">משמרת ערב (15:00 - 23:00)</div>
+                        <small class="text-muted">2 עובדים משובצים · אחמ"ש נוכח</small>
+                    </div>
+                </div>
+
+                <div class="bg-light p-3 rounded-3 mb-3 d-flex justify-content-between align-items-center">
+                    <span class="badge bg-warning text-dark">בהמתנה</span>
+                    <div class="text-end">
+                        <div class="fw-bold">משמרת לילה (23:00 - 07:00)</div>
+                        <small class="text-muted">בקשת החלפה תלויה ועומדת</small>
+                    </div>
+                </div>
+
+                <div class="row g-2 text-center">
+                    <div class="col-6">
+                        <div class="p-2 border rounded-3 bg-white">
+                            <div class="fw-bold text-primary">98% שביעות רצון</div>
+                            <small class="text-muted">בקרב צוותי עבודה</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 border rounded-3 bg-white">
+                            <div class="fw-bold text-success">4 שעות נחסכות</div>
+                            <small class="text-muted">לכל מנהל מדי שבוע</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="row g-3 mt-5 text-center">
+        <div class="col-md-4">
+            <div class="bg-white p-4 rounded-4 shadow-sm">
+                <h3 class="fw-bold text-primary">+50,000</h3>
+                <p class="text-muted mb-0">משמרות חודשיות מתוכננות בהצלחה</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bg-white p-4 rounded-4 shadow-sm">
+                <h3 class="fw-bold text-primary">99.9%</h3>
+                <p class="text-muted mb-0">זמינות שרתים וסנכרון בזמן אמת</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="bg-white p-4 rounded-4 shadow-sm">
+                <h3 class="fw-bold text-primary">100% תאימות</h3>
+                <p class="text-muted mb-0">תמיכה מלאה בדיני וחוקי העבודה בישראל</p>
+            </div>
+        </div>
+    </div>
+</div>
