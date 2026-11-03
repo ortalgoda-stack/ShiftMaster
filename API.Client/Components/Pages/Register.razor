@@ -1,101 +1,127 @@
 ﻿@page "/register"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@using System.Net.Mail
+@using API.Server.Models
+@inject HttpClient Http
+@inject NavigationManager Navigation
 
-<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light py-5" dir="rtl">
-    <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 style-card">
-        <!-- Header / Logo -->
-        <div class="text-center mb-4">
-            <div class="d-inline-flex align-items-center gap-2 mb-2">
-                <span class="bg-primary text-white p-2 rounded-3 fw-bold fs-4">ShiftMaster</span>
-            </div>
-            <p class="text-muted small">מערכת לניהול משמרות חכם</p>
-            <h2 class="fw-bold text-dark mt-3">יצירת חשבון חדש</h2>
-            <p class="text-secondary small">הצטרפו לאלפי עסקים שמנהלים משמרות בצורה חכמה, מדויקת ומהירה.</p>
-        </div>
-
-        <!-- Registration Form -->
-        <form>
-            <div class="mb-3">
-                <label class="form-label fw-semibold text-secondary small">שם מלא</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-white text-muted border-end-0">👤</span>
-                    <input type="text" class="form-control border-start-0" placeholder="ישראל ישראלי" />
-                </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold text-secondary small">שם משתמש</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white text-muted border-end-0">@@</span>
-                        <input type="text" class="form-control border-start-0" placeholder="israel_i" />
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg p-4 rounded-3">
+                <div class="card-body text-end">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-person-plus-fill text-primary display-3"></i>
+                        <h2 class="fw-bold mt-2">הרשמה לעובד/ת חדש/ה</h2>
+                        <p class="text-muted">מלאי את הפרטים ליצירת חשבון במערכת ShiftMaster</p>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold text-secondary small">כתובת אימייל</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white text-muted border-end-0">✉️</span>
-                        <input type="email" class="form-control border-start-0" placeholder="name@company.co.il" />
-                    </div>
-                </div>
-            </div>
 
-            <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold text-secondary small">סיסמה</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white text-muted border-end-0">🔒</span>
-                        <input type="password" class="form-control border-start-0" placeholder="לפחות 8 תווים" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-semibold text-secondary small">אימות סיסמה</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white text-muted border-end-0">🛡️</span>
-                        <input type="password" class="form-control border-start-0" placeholder="הזן שוב לאימות" />
+                    <Field Id="reg-username" Label="שם משתמש" @bind-Value="username" />
+                    <Field Id="reg-email" Label="אימייל" Type="email" @bind-Value="email" />
+                    <Field Id="reg-password" Label="סיסמה" Type="password" @bind-Value="password" />
+                    <Field Id="reg-confirm" Label="אימות סיסמה" Type="password" @bind-Value="confirmPassword" />
+
+                    @if (errorMessage != null)
+                    {
+                        <div class="alert alert-danger" role="alert">@errorMessage</div>
+                    }
+
+                    @if (isRegistered)
+                    {
+                        <div class="alert alert-success" role="status">
+                            <strong>ההרשמה הצליחה!</strong> עוברים לדף הכניסה בעוד @secondsLeft שניות.
+                        </div>
+                    }
+
+                    <button class="btn btn-primary btn-lg w-100 mt-2 shadow-sm mb-3" type="button" 
+                            disabled="@(isBusy || isRegistered)" @onclick="RegisterAsync">
+                        @(isBusy ? "בודקים..." : "הרשמה")
+                    </button>
+
+                    <div class="text-center mt-3">
+                        <span class="text-muted">כבר יש לך חשבון?</span>
+                        <a href="/login" class="text-primary text-decoration-none fw-bold ms-1">להתחברות</a>
                     </div>
                 </div>
             </div>
-
-            <div class="mb-4">
-                <label class="form-label fw-semibold text-secondary small">תפקיד במערכת</label>
-                <select class="form-select">
-                    <option selected>עובד (Employee) - הגשת זמינות וצפייה במשמרות</option>
-                    <option>מנהל (Manager) - ניהול משמרות, עובדים ואישורים</option>
-                </select>
-                <div class="form-text small mt-2 bg-info-subtle text-info-emphasis p-2 rounded-3">
-                    ℹ️ מנהלים מקבלים גישה מלאה להקמת סניפים, לוחות תורנות, אישור החלפות והפקת דוחות שכר.
-                </div>
-            </div>
-
-            <div class="form-check mb-4">
-                <input class="form-check-input" type="checkbox" id="termsCheck" />
-                <label class="form-check-label small text-secondary" for="termsCheck">
-                    קראתי ואני מסכים לתנאי השימוש וכן למדיניות הפרטיות של ShiftMaster.
-                </label>
-            </div>
-
-            <button type="button" class="btn btn-primary w-100 py-2 rounded-3 fw-bold mb-3">
-                הרשם עכשיו ←
-            </button>
-        </form>
-
-        <!-- Footer Link -->
-        <div class="text-center mt-3 pt-3 border-top">
-            <span class="text-secondary small">כבר יש לך חשבון? </span>
-            <a href="/login" class="text-primary text-decoration-none fw-bold small">התחבר כאן ></a>
-        </div>
-
-        <div class="d-flex justify-content-center gap-3 text-muted small mt-4">
-            <span>🔒 אבטחת מידע SSL מוצפנת</span>
-            <span>☁️ גיבוי אוטומטי בענן</span>
-            <span>🎧 תמיכה מלאה בעברית</span>
         </div>
     </div>
 </div>
 
-<style>
-    .style-card {
-        max-width: 650px;
-        width: 100%;
+@code {
+    private string username = "";
+    private string email = "";
+    private string password = "";
+    private string confirmPassword = "";
+
+    private string? errorMessage;
+    private bool isBusy = false;
+    private bool isRegistered = false;
+    private int secondsLeft = 5;
+
+    private async Task RegisterAsync()
+    {
+        errorMessage = null;
+
+        // בדיקות קלט מקומיות ב-C#
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
+        {
+            errorMessage = "יש למלא את כל השדות.";
+            return;
+        }
+
+        if (!MailAddress.TryCreate(email.Trim(), out _))
+        {
+            errorMessage = "כתובת האימייל לא תקינה.";
+            return;
+        }
+
+        if (password != confirmPassword)
+        {
+            errorMessage = "הסיסמה ואימות הסיסמה לא זהים.";
+            return;
+        }
+
+        isBusy = true;
+
+        try
+        {
+            // יצירת אובייקט המשתמש מתוך הנתונים שהוקלדו
+            DAL.User newUser = new DAL.User
+            {
+                Username = username.Trim(),
+                Email = email.Trim(),
+                PasswordHash = password
+            };
+
+            // שליחת בקשת POST לשרת בכתובת המדויקת api/user
+            HttpResponseMessage response = await Http.PostAsJsonAsync("api/user", newUser);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                errorMessage = "ההרשמה נכשלה. נסו שוב.";
+                return;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = $"שגיאת תקשורת: {ex.Message}";
+            return;
+        }
+        finally
+        {
+            isBusy = false;
+        }
+
+        // הצלחה: ספירה לאחור ומעבר לדף הכניסה
+        isRegistered = true;
+        while (secondsLeft > 0)
+        {
+            StateHasChanged();
+            await Task.Delay(1000);
+            secondsLeft--;
+        }
+        Navigation.NavigateTo("login");
     }
-</style>
+}

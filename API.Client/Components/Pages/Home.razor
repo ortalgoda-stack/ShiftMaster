@@ -1,4 +1,6 @@
 ﻿@page "/"
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
 
 <div class="min-vh-100 bg-light p-4" dir="rtl">
     <!-- Header / Navbar -->
@@ -13,9 +15,21 @@
             <a href="#" class="text-decoration-none text-secondary">אודות</a>
             <a href="#" class="text-decoration-none text-secondary">יצירת קשר</a>
         </nav>
-        <div class="d-flex gap-2">
-            <a href="/login" class="btn btn-outline-secondary px-4 rounded-pill">התחברות</a>
-            <a href="/register" class="btn btn-primary px-4 rounded-pill">הרשמה למערכת</a>
+        
+        <!-- כפתורי התחברות / הצגת שם משתמש -->
+        <div class="d-flex gap-2 align-items-center">
+            @if (currentUser != null)
+            {
+                <span class="fw-bold text-primary me-2">👋 שלום, @currentUser.FullName</span>
+                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3" @onclick="LogoutAsync">
+                    התנתק
+                </button>
+            }
+            else
+            {
+                <a href="/login" class="btn btn-outline-secondary px-4 rounded-pill">התחברות</a>
+                <a href="/register" class="btn btn-primary px-4 rounded-pill">הרשמה למערכת</a>
+            }
         </div>
     </header>
 
@@ -32,8 +46,17 @@
                 פלטפורמה אינטואיטיבית ומתקדמת לניהול עובדים, הגשת זמינות שבועית, ויצירת לוח משמרות אופטימלי בלחיצת כפתור אחת. מותאם למנהלים ולצוותים בכל סדר גודל.
             </p>
             <div class="d-flex gap-3 justify-content-start mb-4">
-                <a href="/register" class="btn btn-primary btn-lg rounded-pill px-4">הרשמה חינם עכשיו ←</a>
-                <a href="/login" class="btn btn-outline-primary btn-lg rounded-pill px-4">התחברות למערכת</a>
+                @if (currentUser != null)
+                {
+                    <span class="badge bg-success-subtle text-success fs-6 p-3 rounded-pill">
+                        אתה מחובר למערכת בהצלחה!
+                    </span>
+                }
+                else
+                {
+                    <a href="/register" class="btn btn-primary btn-lg rounded-pill px-4">הרשמה חינם עכשיו ←</a>
+                    <a href="/login" class="btn btn-outline-primary btn-lg rounded-pill px-4">התחברות למערכת</a>
+                }
             </div>
             <div class="d-flex gap-4 text-muted small">
                 <span>✓ 14 ימי ניסיון ללא התחייבות</span>
@@ -118,3 +141,34 @@
         </div>
     </div>
 </div>
+
+@code {
+    private DAL.User? currentUser;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                var userJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "currentUser");
+                if (!string.IsNullOrEmpty(userJson))
+                {
+                    currentUser = System.Text.Json.JsonSerializer.Deserialize<DAL.User>(userJson);
+                    StateHasChanged();
+                }
+            }
+            catch
+            {
+                // במידה ואין משתמש ב-localStorage
+            }
+        }
+    }
+
+    private async Task LogoutAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "currentUser");
+        currentUser = null;
+        Navigation.NavigateTo("/", forceLoad: true);
+    }
+}

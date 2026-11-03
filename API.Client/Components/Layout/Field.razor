@@ -1,0 +1,22 @@
+﻿<div class="mb-3">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label for="@Id" class="form-label">@Label</label>
+    }
+    <input id="@Id" type="@Type" class="form-control" placeholder="@Placeholder"
+           value="@Value" @onchange="OnValueChanged" />
+</div>
+
+@code {
+    [Parameter] public string Id { get; set; } = "";
+    [Parameter] public string Label { get; set; } = "";
+    [Parameter] public string Type { get; set; } = "text";
+    [Parameter] public string Placeholder { get; set; } = "";
+
+    // זוג פרמטרים שמאפשר bind-Value@ דו-כיווני
+    [Parameter] public string? Value { get; set; }
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+
+    private Task OnValueChanged(ChangeEventArgs e) =>
+        ValueChanged.InvokeAsync(e.Value?.ToString());
+}

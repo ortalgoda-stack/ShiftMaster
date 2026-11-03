@@ -1,30 +1,68 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">API.Client</a>
+﻿@inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
+
+<header class="p-3 mb-3 border-bottom bg-white shadow-sm" dir="rtl">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between">
+        
+        <!-- לוגו -->
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none fw-bold fs-4 gap-2">
+            <span class="bg-primary text-white p-2 rounded-3 fs-5">ShiftMaster</span>
+            <span class="fs-6 text-muted font-normal ms-2">ניהול משמרות חכם</span>
+        </a>
+
+        <!-- תפריט ניווט -->
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 fw-semibold">
+            <li><a href="/" class="nav-link px-3 link-primary">דף הבית</a></li>
+            <li><a href="#" class="nav-link px-3 link-dark">תוכניות</a></li>
+            <li><a href="#" class="nav-link px-3 link-dark">אודות</a></li>
+            <li><a href="#" class="nav-link px-3 link-dark">יצירת קשר</a></li>
+        </ul>
+
+        <!-- כפתורי התחברות / אזור אישי -->
+        <div class="text-end d-flex align-items-center gap-2">
+            @if (currentUser != null)
+            {
+                <span class="fw-bold text-primary me-2">👋 שלום, @currentUser.Username</span>
+                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3" @onclick="LogoutAsync">
+                    התנתק
+                </button>
+            }
+            else
+            {
+                <a href="/login" class="btn btn-outline-secondary rounded-pill px-4">התחברות</a>
+                <a href="/register" class="btn btn-primary rounded-pill px-4">הרשמה למערכת</a>
+            }
+        </div>
     </div>
-</div>
+</header>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+@code {
+    private DAL.User? currentUser;
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                var userJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "currentUser");
+                if (!string.IsNullOrEmpty(userJson))
+                {
+                    currentUser = System.Text.Json.JsonSerializer.Deserialize<DAL.User>(userJson);
+                    StateHasChanged(); // רענון התצוגה לאחר טעינת המשתמש
+                }
+            }
+            catch
+            {
+                // במידה ואין משתמש ב-localStorage
+            }
+        }
+    }
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
+    private async Task LogoutAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "currentUser");
+        currentUser = null;
+        Navigation.NavigateTo("/", forceLoad: true);
+    }
+}

@@ -1,4 +1,8 @@
 ﻿@page "/login"
+@rendermode InteractiveServer
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
 
 <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light py-5" dir="rtl">
     <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 style-card">
@@ -13,12 +17,12 @@
         </div>
 
         <!-- Login Form -->
-        <form>
+        <form @onsubmit="LoginAsync">
             <div class="mb-3">
                 <label class="form-label fw-semibold text-secondary small">שם משתמש או דוא"ל</label>
                 <div class="input-group">
                     <span class="input-group-text bg-white text-muted border-end-0">👤</span>
-                    <input type="text" class="form-control border-start-0" placeholder="הזן שם משתמש או אימייל" />
+                    <input type="text" class="form-control border-start-0" placeholder="הזן שם משתמש או אימייל" @bind="usernameOrEmail" />
                 </div>
             </div>
 
@@ -29,7 +33,7 @@
                 </div>
                 <div class="input-group">
                     <span class="input-group-text bg-white text-muted border-end-0">🔒</span>
-                    <input type="password" class="form-control border-start-0" placeholder="••••••••" />
+                    <input type="password" class="form-control border-start-0" placeholder="••••••••" @bind="password" />
                 </div>
             </div>
 
@@ -40,9 +44,16 @@
                 </label>
             </div>
 
-            <button type="button" class="btn btn-primary w-100 py-2 rounded-3 fw-bold mb-3">
-                התחבר עכשיו ←
+            <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-bold mb-3" disabled="@isBusy">
+                @(isBusy ? "מתחבר..." : "התחבר עכשיו ←")
             </button>
+
+            @if (errorMessage != null)
+            {
+                <div class="alert alert-danger text-center p-2 rounded-3 small mt-2" role="alert">
+                    @errorMessage
+                </div>
+            }
         </form>
 
         <!-- Footer Link -->
@@ -64,3 +75,55 @@
         width: 100%;
     }
 </style>
+
+@code {
+    private string usernameOrEmail = "";
+    private string password = "";
+    private string? errorMessage;
+    private bool isBusy = false;
+
+    private async Task LoginAsync()
+    {
+        if (string.IsNullOrWhiteSpace(usernameOrEmail) || string.IsNullOrWhiteSpace(password))
+        {
+            errorMessage = "יש למלא שם משתמש/אימייל וסיסמה.";
+            return;
+        }
+
+        isBusy = true;
+        errorMessage = null;
+
+        try
+        {
+            // שליפת המשתמשים משרת ה-API
+            var users = await Http.GetFromJsonAsync<List<DAL.User>>("api/user");
+
+            // בדיקה האם קיימת התאמה לשם משתמש/אימייל ולסיסמה
+            var user = users?.FirstOrDefault(u =>
+                (u.Username.Equals(usernameOrEmail.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                 u.Email.Equals(usernameOrEmail.Trim(), StringComparison.OrdinalIgnoreCase))
+                && u.PasswordHash == password);
+
+            if (user != null)
+            {
+                // שמירת המשתמש בדפדפן (localStorage)
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "currentUser", System.Text.Json.JsonSerializer.Serialize(user));
+
+                // מעבר לדף הבית
+                Navigation.NavigateTo("/", forceLoad: true);
+            }
+            else
+            {
+                errorMessage = "שם משתמש/אימייל או סיסמה שגויים.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"שגיאה בתקשורת עם השרת: {ex.Message}";
+        }
+        finally
+        {
+            isBusy = false;
+        }
+    }
+}

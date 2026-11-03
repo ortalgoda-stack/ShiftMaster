@@ -100,6 +100,7 @@ namespace DAL
         }
 
         // הוספת משתמש חדש
+        // הוספת משתמש חדש
         public bool AddUser(User user)
         {
             using (MySqlConnection conn = new MySqlConnection(_connectionString))
@@ -113,10 +114,16 @@ namespace DAL
                 using (MySqlCommand cmd = new MySqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Username", user.Username);
-                    cmd.Parameters.AddWithValue("@FullName", user.FullName);
+
+                    // אם FullName ריק, נציב בו את Username
+                    cmd.Parameters.AddWithValue("@FullName", string.IsNullOrWhiteSpace(user.FullName) ? user.Username : user.FullName);
+
                     cmd.Parameters.AddWithValue("@Email", user.Email);
                     cmd.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
-                    cmd.Parameters.AddWithValue("@RoleID", user.RoleID);
+
+                    // אם RoleID הוא 0 (לא הוגדר), ניתן לו ברירת מחדל של 1 (עובד/משתמש רגיל)
+                    cmd.Parameters.AddWithValue("@RoleID", user.RoleID <= 0 ? 1 : user.RoleID);
+
                     cmd.Parameters.AddWithValue("@Phone", user.Phone ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@MaxShiftsPerWeek", user.MaxShiftsPerWeek);
                     cmd.Parameters.AddWithValue("@MinShiftsPerWeek", user.MinShiftsPerWeek);

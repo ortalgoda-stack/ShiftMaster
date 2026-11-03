@@ -1,6 +1,16 @@
-@Server_HostAddress = http://localhost:5507
+@Server_HostAddress = https://localhost:7419
 
-GET {{Server_HostAddress}}/api/weatherforecast/
+### בדיקת שליפת כל המשתמשים
+GET {{Server_HostAddress}}/api/user
 Accept: application/json
 
 ###
+### בדיקת הרשמת משתמש חדש (POST)
+POST {{Server_HostAddress}}/api/user
+Content-Type: application/json
+
+{
+  "Username": "OrtalTest",
+  "Email": "ortaltest@gmail.com",
+  "PasswordHash": "123456"
+}
